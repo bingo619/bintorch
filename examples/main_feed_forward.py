@@ -41,18 +41,20 @@ test_loader = DataLoader(dataset=MnistDataset(training=False),
 optimizer = bintorch.optim.Adam(model.parameters(), lr=learning_rate)
 
 
-def eval_model():
+def eval_model(epoch):
     correct = 0
     total = 0
+    loss = 0
     for images, labels in test_loader:
         images = Variable(images)
+        labels_var = Variable(labels)
         outputs = model(images)
         predicted = np.argmax(outputs.data, 1)
+        loss += F.cross_entropy(outputs, labels_var, size_average=False).data
         total += labels.shape[0]
         correct += (predicted == labels).sum()
 
-    print('\r')
-    print('\rTest Accuracy: {}%'.format(100 * correct / total))
+    print('\rEpoch [{}/{}], Test Accuracy: {}%  Loss: {:.4f}'.format(epoch + 1, num_epochs, 100 * correct / total, loss/total))
 
 for epoch in range(num_epochs):
     for i, (images, labels) in enumerate(train_loader):
@@ -68,4 +70,4 @@ for epoch in range(num_epochs):
 
         print('\rEpoch [{}/{}], Step [{}/{}], Loss: {:.4f}'
                   .format(epoch + 1, num_epochs, i + 1, len(train_loader), loss.data), end=' ')
-    eval_model()
+    eval_model(epoch)
