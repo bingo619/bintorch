@@ -24,3 +24,6 @@ def max_pool2d(input, kernel_size):
 
     return _functions.Max_pool2d.apply(input, kernel_size)
 
+def dropout(input, p=0.5, training=False):
+
+    return _functions.Dropout.apply(input, p, training)

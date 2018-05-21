@@ -8,7 +8,7 @@ import autograd.numpy as np
 
 num_epochs = 30
 batch_size = 64
-learning_rate = 0.01
+learning_rate = 0.001
 
 class ConvNet(nn.Module):
     def __init__(self):
@@ -23,7 +23,7 @@ class ConvNet(nn.Module):
         x = F.relu(F.max_pool2d(self.conv2(x), 2))
         x = x.view(-1, 320)
         x = self.fc1(x)
-        # x = F.dropout(x, training=self.training)
+        x = F.dropout(x, training=self.training)
         x = F.relu(x)
         x = self.fc2(x)
         return x
@@ -44,6 +44,7 @@ optimizer = bintorch.optim.Adam(model.parameters(), lr=learning_rate)
 
 
 def eval_model(epoch):
+    model.eval()
     correct = 0
     total = 0
     loss = 0
@@ -59,6 +60,7 @@ def eval_model(epoch):
     print('\rEpoch [{}/{}], Test Accuracy: {}%  Loss: {:.4f}'.format(epoch + 1, num_epochs, 100 * correct / total, loss/total))
 
 for epoch in range(num_epochs):
+    model.train()
     for i, (images, labels) in enumerate(train_loader):
         images = Variable(images, requires_grad=True)
         labels = Variable(labels)

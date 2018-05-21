@@ -19,7 +19,7 @@ class Module(object):
     def register_parameter(self, name, param):
         """Adds a parameter to the module.
 
-        The parameter can be accessed as an attribute using given name.
+        The parameter can be accessed as an attribuete using given name.
         """
         if '_parameters' not in self.__dict__:
             raise AttributeError(
@@ -249,6 +249,23 @@ class Module(object):
                 submodule_prefix = prefix + ('.' if prefix else '') + name
                 for m in module.named_modules(memo, submodule_prefix):
                     yield m
+
+    def train(self, mode=True):
+        """Sets the module in training mode.
+
+        This has any effect only on modules such as Dropout or BatchNorm.
+        """
+        self.training = mode
+        for module in self.children():
+            module.train(mode)
+        return self
+
+    def eval(self):
+        """Sets the module in evaluation mode.
+
+        This has any effect only on modules such as Dropout or BatchNorm.
+        """
+        return self.train(False)
 
     # def zero_grad(self):
     #     """Sets gradients of all model parameters to zero."""
