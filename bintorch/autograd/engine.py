@@ -13,6 +13,8 @@ def excute(fn, grad_in=None):
             return
 
         grad_outs = fn.apply(grad_in)
+        if type(grad_outs) is not tuple:
+            grad_outs = (grad_outs, )
 
         for i, next_func in enumerate(fn.next_functions):
                 excute(next_func, grad_outs[i])
