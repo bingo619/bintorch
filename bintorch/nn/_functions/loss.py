@@ -13,6 +13,7 @@ class CrossEntropy(Function):
         assert isinstance(input, Variable)
         assert isinstance(target, Variable)
 
+        #todo jax doesn't support indexing, this is not a proper cross entropy loss
         def np_fn(input, targets, size_average=True):
             # probs = np.exp(input - np.max(input, axis=1, keepdims=True))
             # probs /= np.sum(probs, axis=1, keepdims=True)
