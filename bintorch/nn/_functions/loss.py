@@ -15,19 +15,23 @@ class CrossEntropy(Function):
 
         #todo jax doesn't support indexing, this is not a proper cross entropy loss
         def np_fn(input, targets, size_average=True):
-            # probs = np.exp(input - np.max(input, axis=1, keepdims=True))
-            # probs /= np.sum(probs, axis=1, keepdims=True)
-            # N = input.shape[0]
+            max = np.max(input, axis=1, keepdims=True)
+            probs = np.exp(input - max)
+            probs /= np.sum(probs, axis=1, keepdims=True)
+            N = input.shape[0]
+            # probs[0]
+            # np.arange(N)
+            probs = [probs[i, targets[i]] for i in np.arange(N)]
+            ll = np.log(np.array(probs))
+
+            return -np.sum(ll / N)
             #
-            # probs = [probs[i, targets[i]] for i in np.arange(N)]
-            # ll = np.log(np.array(probs))
-            # #
-            # if size_average:
-            #     return -np.sum(ll / N)
-            # else:
-            #     return -np.sum(ll)
-            logits = input - logsumexp(input, 1, keepdims=True)
-            return np.sum(logits * targets)
+            if size_average:
+                return -np.sum(ll / N)
+            else:
+                return -np.sum(ll)
+            # logits = input - logsumexp(input, 1, keepdims=True)
+            # return np.sum(logits * targets)
 
         np_args = (input.data, target.data, size_average)
         return np_fn, np_args, jit(np_fn)(*np_args)

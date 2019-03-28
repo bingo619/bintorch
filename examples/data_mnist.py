@@ -28,9 +28,6 @@ def mnist():
     def parse_labels(filename):
         with gzip.open(filename, 'rb') as fh:
             magic, num_data = struct.unpack(">II", fh.read(8))
-            labels = onp.array(array.array("B", fh.read()), dtype=onp.uint8)
-            n_values = np.max(labels) + 1
-            return np.eye(n_values)[labels]
             return onp.array(array.array("B", fh.read()), dtype=onp.uint8)
 
     def parse_images(filename):
