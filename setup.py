@@ -5,5 +5,5 @@ if __name__ == '__main__':
         name="BinTorch",
         version='0.1',
         description=("Simple replication of PyTorch"),
-        install_requires=['autograd']
+        install_requires=['jax', 'jaxlib']
         )

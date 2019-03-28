@@ -1,7 +1,8 @@
 import math
 
 import bintorch
-import autograd.numpy as np
+import jax.numpy as np
+import jax.random as random
 
 class Variable(object):
 
@@ -12,8 +13,13 @@ class Variable(object):
         self.grad_fn = grad_fn
         self.grad = None
 
+    def grad_fill_zero(self):
+        if self.grad is not None:
+            self.grad = np.zeros(self.grad.shape)
+
     def uniform(self, low=None, high=None):
-        self.data = np.random.uniform(low=low,high=high,size=self.data.shape)
+        key = random.PRNGKey(0)
+        self.data = random.uniform(minval=low,maxval=high,shape=self.data.shape, key=key)
 
     def get_grad_accumulator(self):
         if self.grad_fn is not None:

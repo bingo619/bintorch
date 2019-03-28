@@ -1,5 +1,7 @@
 import bintorch
-import numpy as np
+import jax.numpy as np
+import numpy as onp
+# import jax.random as random
 
 class Sampler(object):
     """Base class for all Samplers.
@@ -47,7 +49,7 @@ class RandomSampler(Sampler):
         self.data_source = data_source
 
     def __iter__(self):
-        return iter(np.random.choice(len(self.data_source), len(self.data_source), replace=False))
+        return iter(onp.random.choice(len(self.data_source), len(self.data_source), replace=False))
 
     def __len__(self):
         return len(self.data_source)

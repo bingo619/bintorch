@@ -1,3 +1,5 @@
+from jax import jit
+
 from .variable import *
 from .np_autograd import elementwise_grad
 
@@ -108,5 +110,5 @@ class Function(with_metaclass(FunctionMeta)):
         indexes = [index for index, need_grad in enumerate(ctx.needs_input_grad) if need_grad]
 
         np_grad_fn = elementwise_grad(np_fn, indexes, initial_grad=grad_outputs)
-        grads = np_grad_fn(*np_args)
+        grads = jit(np_grad_fn)(*np_args)
         return grads

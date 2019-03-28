@@ -1,6 +1,6 @@
 from .variable import Variable
 from .function import AccumulateGrad
-import numpy as np
+import jax.numpy as np
 
 def excute(fn, grad_in=None):
     if fn is not None:

@@ -1,6 +1,8 @@
 from bintorch.autograd import Function
 from bintorch.autograd import Variable
-import autograd.numpy as np
+import jax.numpy as np
+from jax import jit
+
 
 class ReLU(Function):
 
@@ -12,7 +14,7 @@ class ReLU(Function):
             return input_np * (input_np > 0)
 
         np_args = (input.data, )
-        return np_fn, np_args, np_fn(*np_args)
+        return np_fn, np_args, jit(np_fn)(*np_args)
 
     @staticmethod
     def backward(ctx, grad_output):

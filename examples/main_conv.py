@@ -4,7 +4,7 @@ from bintorch.autograd import Variable
 from examples.data_mnist import MnistDataset, collate_fn
 from bintorch.utils.data import DataLoader
 import bintorch
-import autograd.numpy as np
+import jax.numpy as np
 
 num_epochs = 30
 batch_size = 64

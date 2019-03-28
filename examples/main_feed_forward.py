@@ -4,14 +4,15 @@ from bintorch.autograd import Variable
 from examples.data_mnist import MnistDataset, collate_fn
 from bintorch.utils.data import DataLoader
 import bintorch
-import autograd.numpy as np
+import jax.numpy as np
+from jax import jit
 
 input_size = 784
 hidden_size = 500
 num_classes = 10
 num_epochs = 30
 batch_size = 64
-learning_rate = 0.01
+learning_rate = 0.001
 
 class NeuralNet(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):

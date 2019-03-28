@@ -4,7 +4,7 @@ import bintorch
 from copy import deepcopy
 from itertools import chain
 from bintorch.autograd import Variable
-import autograd.numpy as np
+import jax.numpy as np
 
 required = object()
 
@@ -79,7 +79,8 @@ class Optimizer(object):
         for group in self.param_groups:
             for p in group['params']:
                 if p.grad is not None:
-                    p.grad.fill(0)
+                    # p.grad.fill(0)
+                    p.grad_fill_zero()
 
     def step(self, closure):
         """Performs a single optimization step (parameter update).

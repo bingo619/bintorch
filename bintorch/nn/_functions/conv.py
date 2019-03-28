@@ -1,7 +1,7 @@
 from bintorch.autograd import Function
 from bintorch.autograd import Variable
 import autograd.scipy.signal
-import autograd.numpy as np
+import jax.numpy as np
 from .img2col import *
 
 conv = autograd.scipy.signal.convolve

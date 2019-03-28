@@ -9,7 +9,9 @@ import os
 import gzip
 import struct
 import array
-import autograd.numpy as np
+import jax.numpy as np
+import numpy as onp
+
 from urllib.request import urlretrieve
 
 def download(url, filename):
@@ -26,12 +28,15 @@ def mnist():
     def parse_labels(filename):
         with gzip.open(filename, 'rb') as fh:
             magic, num_data = struct.unpack(">II", fh.read(8))
-            return np.array(array.array("B", fh.read()), dtype=np.uint8)
+            labels = onp.array(array.array("B", fh.read()), dtype=onp.uint8)
+            n_values = np.max(labels) + 1
+            return np.eye(n_values)[labels]
+            return onp.array(array.array("B", fh.read()), dtype=onp.uint8)
 
     def parse_images(filename):
         with gzip.open(filename, 'rb') as fh:
             magic, num_data, rows, cols = struct.unpack(">IIII", fh.read(16))
-            return np.array(array.array("B", fh.read()), dtype=np.uint8).reshape(num_data, rows, cols)
+            return onp.array(array.array("B", fh.read()), dtype=onp.uint8).reshape(num_data, rows, cols)
 
     for filename in ['train-images-idx3-ubyte.gz',
                      'train-labels-idx1-ubyte.gz',
@@ -47,7 +52,7 @@ def mnist():
     return train_images, train_labels, test_images, test_labels
 
 def load_mnist(flatten=True):
-    partial_flatten = lambda x : np.reshape(x, (x.shape[0], np.prod(x.shape[1:])))
+    partial_flatten = lambda x : onp.reshape(x, (x.shape[0], onp.prod(x.shape[1:])))
 
     train_images, train_labels, test_images, test_labels = mnist()
     train_images = partial_flatten(train_images) / 255.0

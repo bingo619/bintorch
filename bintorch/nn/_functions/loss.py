@@ -1,6 +1,10 @@
 from bintorch.autograd import Function
 from bintorch.autograd import Variable
-import autograd.numpy as np
+import jax.numpy as np
+import numpy as onp
+from jax import jit
+from jax.scipy.special import logsumexp
+
 
 class CrossEntropy(Function):
 
@@ -10,19 +14,22 @@ class CrossEntropy(Function):
         assert isinstance(target, Variable)
 
         def np_fn(input, targets, size_average=True):
-            probs = np.exp(input - np.max(input, axis=1, keepdims=True))
-            probs /= np.sum(probs, axis=1, keepdims=True)
-            N = input.shape[0]
-
-            ll = np.log(np.array(probs[np.arange(N), targets]))
-
-            if size_average:
-                return -np.sum(ll / N)
-            else:
-                return -np.sum(ll)
+            # probs = np.exp(input - np.max(input, axis=1, keepdims=True))
+            # probs /= np.sum(probs, axis=1, keepdims=True)
+            # N = input.shape[0]
+            #
+            # probs = [probs[i, targets[i]] for i in np.arange(N)]
+            # ll = np.log(np.array(probs))
+            # #
+            # if size_average:
+            #     return -np.sum(ll / N)
+            # else:
+            #     return -np.sum(ll)
+            logits = input - logsumexp(input, 1, keepdims=True)
+            return np.sum(logits * targets)
 
         np_args = (input.data, target.data, size_average)
-        return np_fn, np_args, np_fn(*np_args)
+        return np_fn, np_args, jit(np_fn)(*np_args)
 
     @staticmethod
     def backward(ctx, grad_output):

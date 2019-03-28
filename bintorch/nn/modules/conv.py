@@ -7,7 +7,7 @@ from .module import Module
 from bintorch.nn.parameter import Parameter
 from .. import functional as F
 
-import autograd.numpy as np
+import jax.numpy as np
 
 class Conv2d(Module):
 

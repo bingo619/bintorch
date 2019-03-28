@@ -1,6 +1,6 @@
 import math
 from .optimizer import Optimizer
-import autograd.numpy as np
+import jax.numpy as np
 
 class Adam(Optimizer):
     """Implements Adam algorithm.

@@ -1,5 +1,5 @@
 
-import autograd.numpy as np
+import jax.numpy as np
 
 from ..function import Function
 

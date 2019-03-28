@@ -1,7 +1,7 @@
 from bintorch.autograd import Function
 from bintorch.autograd import Variable
-import autograd.numpy as np
-
+# import jax.numpy as np
+import jax.numpy as np
 class Dropout(Function):
 
     @staticmethod

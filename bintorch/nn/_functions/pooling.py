@@ -1,6 +1,6 @@
 from bintorch.autograd import Function
 from bintorch.autograd import Variable
-import autograd.numpy as np
+import jax.numpy as np
 from .img2col import *
 
 def _pool_forward(X, size=2, stride=2):

@@ -1,6 +1,8 @@
 from bintorch.autograd import Function
 from bintorch.autograd import Variable
-import autograd.numpy as np
+import jax.numpy as np
+from jax import jit
+
 
 class Linear(Function):
 
@@ -18,7 +20,7 @@ class Linear(Function):
                 return out+bias
 
         np_args = (input.data, weights.data, None if bias is None else bias.data)
-        return np_fn, np_args, np_fn(*np_args)
+        return np_fn, np_args, jit(np_fn)(*np_args)
 
     @staticmethod
     def backward(ctx, grad_output):
